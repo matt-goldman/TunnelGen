@@ -1,4 +1,4 @@
-using TunnelGen.Generators.Extensions;
+using TunnelGen.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

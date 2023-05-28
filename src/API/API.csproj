@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Shared\Shared.csproj" />
-    <ProjectReference Include="..\TunnelGen.Generators\TunnelGen.Generators.csproj" />
+    <ProjectReference Include="..\TunnelGen.Extensions\TunnelGen.Extensions.csproj" />
   </ItemGroup>
 
 </Project>

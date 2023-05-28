@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 
-namespace TunnelGen.Generators.Extensions;
+namespace TunnelGen.Extensions;
 
 public static class WebApplicationExtensions
 {
