@@ -95,10 +95,24 @@ namespace TunnelGen.Generators.Generators
                                     string tunnelName = attributeData.NamedArguments.FirstOrDefault(na => na.Key == "TunnelName").Value.Value?.ToString() ?? variableName;
                                     string modifier = fieldSymbol.IsStatic ? "static" : null;
 
-                                    context.AnalyzerConfigOptions.GlobalOptions.TryGetValue("build_property.TunnelUrl", out var tunnelUrl);
+                                    string tunnelProperty = $"build_property_{tunnelName}";
 
-                                    tunnelUrl = string.IsNullOrWhiteSpace(tunnelUrl) ? "https://mytunnel.com" : tunnelUrl;
+                                    context.AnalyzerConfigOptions.GlobalOptions.TryGetValue(tunnelProperty, out var tunnelUrl);
 
+                                    context.AnalyzerConfigOptions.GlobalOptions.TryGetValue("build_property.DefaultTunnel", out var defaultTunnelUrl);
+
+                                    if (string.IsNullOrWhiteSpace(tunnelUrl))
+                                    {
+                                        context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor("SG0002", "TunnelUrlMissing", $"Tunnel URL for '{tunnelName}' not found. Falling back to the default tunnel URL.", "TunnelGenCategory", DiagnosticSeverity.Warning, true), null));
+                                        tunnelUrl = string.IsNullOrWhiteSpace(tunnelUrl) ? defaultTunnelUrl : tunnelUrl;
+                                    }
+
+                                    if (string.IsNullOrWhiteSpace(tunnelUrl))
+                                    {
+                                        context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor("SG0003", "TunnelUrlMissing", "Both specific and default tunnel URLs are missing. Code generation halted.", "TunnelGenCategory", DiagnosticSeverity.Error, true), null));
+                                        return;
+                                    }
+                                    
                                     string generatedCode = GenerateClassWithTunnelUrlProperty(namespaceName, className, variableName, tunnelUrl, modifier);
 
                                     Debug.WriteLine("Generated this code");
