@@ -15,11 +15,11 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 			});
 
-        //builder.Services.AddHttpClient(App.ApiClient, (opt) =>
-        //                opt.BaseAddress = new Uri(Constants.BaseUrl));
+		builder.Services.AddHttpClient(App.ApiClient, (opt) =>
+						opt.BaseAddress = new Uri(Constants.BaseUrl));
 
 #if DEBUG
-        builder.Logging.AddDebug();
+		builder.Logging.AddDebug();
 #endif
 
 		return builder.Build();

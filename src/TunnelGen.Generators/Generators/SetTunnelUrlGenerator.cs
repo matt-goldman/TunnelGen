@@ -16,79 +16,79 @@ namespace TunnelGen.Generators.Generators
     {
         public void Execute(GeneratorExecutionContext context)
         {
-            Log.Print("Executing code generator");
+            Debug.WriteLine("Executing code generator");
 
             try
             {
-                Log.Print("Trying to get syntax receiver...");
+                Debug.WriteLine("Trying to get syntax receiver...");
                 var receiver = (SyntaxReceiver)context.SyntaxReceiver;
 
-                Log.Print("Got the syntax receiver...");
+                Debug.WriteLine("Got the syntax receiver...");
 
                 var compilation = (CSharpCompilation)context.Compilation;
                 var attributeSymbol = compilation.GetTypeByMetadataName("TunnelGen.Attributes.SetTunnelUrlAttribute");
-                Log.Print($"Attribute symbol full name: {attributeSymbol.ToDisplayString()}");
+                Debug.WriteLine($"Attribute symbol full name: {attributeSymbol.ToDisplayString()}");
 
 
-                Log.Print("Got the attribute symbol...");
+                Debug.WriteLine("Got the attribute symbol...");
 
                 if (!receiver.CandidateAttributes.Any())
                 {
-                    Log.Print("No attributes found");
+                    Debug.WriteLine("No attributes found");
                 }
                 else
                 {
-                    Log.Print($"Found {receiver.CandidateAttributes.Count} attributes");
+                    Debug.WriteLine($"Found {receiver.CandidateAttributes.Count} attributes");
                 }
 
                 foreach (var attributeSyntax in receiver.CandidateAttributes)
                 {
-                    Log.Print($"Getting semantic model for {attributeSyntax.Name}...");
-                    
+                    Debug.WriteLine($"Getting semantic model for {attributeSyntax.Name}...");
+
                     SemanticModel semanticModel = compilation.GetSemanticModel(attributeSyntax.SyntaxTree);
 
-                    Log.Print("Got the semantic model.");
+                    Debug.WriteLine("Got the semantic model.");
 
-                    Log.Print($"attributeSyntax.Parent is of type {attributeSyntax.Parent.GetType().Name}, with kind {attributeSyntax.Parent.Kind()}");
-                    Log.Print($"attributeSyntax.Parent.Parent is of type {attributeSyntax.Parent.Parent.GetType().Name}, with kind {attributeSyntax.Parent.Parent.Kind()}");
+                    Debug.WriteLine($"attributeSyntax.Parent is of type {attributeSyntax.Parent.GetType().Name}, with kind {attributeSyntax.Parent.Kind()}");
+                    Debug.WriteLine($"attributeSyntax.Parent.Parent is of type {attributeSyntax.Parent.Parent.GetType().Name}, with kind {attributeSyntax.Parent.Parent.Kind()}");
 
                     var parentParent = attributeSyntax.Parent.Parent;
-                    Log.Print($"Parent.Parent is of type {parentParent.GetType().Name}, with kind {parentParent.Kind()}");
+                    Debug.WriteLine($"Parent.Parent is of type {parentParent.GetType().Name}, with kind {parentParent.Kind()}");
                     if (parentParent is FieldDeclarationSyntax fieldDecl)
                     {
-                        Log.Print($"Field name: {fieldDecl.Declaration.Variables.First().Identifier.Text}");
+                        Debug.WriteLine($"Field name: {fieldDecl.Declaration.Variables.First().Identifier.Text}");
                     }
                     else if (parentParent is PropertyDeclarationSyntax propDecl)
                     {
-                        Log.Print($"Property name: {propDecl.Identifier.Text}");
+                        Debug.WriteLine($"Property name: {propDecl.Identifier.Text}");
                     }
 
                     if (attributeSyntax.Parent.Parent is FieldDeclarationSyntax fieldDeclarationSyntax)
                     {
-                        Log.Print($"{attributeSyntax.Parent.Parent} is FieldDeclarationSyntax");
+                        Debug.WriteLine($"{attributeSyntax.Parent.Parent} is FieldDeclarationSyntax");
                         foreach (var variable in fieldDeclarationSyntax.Declaration.Variables)
                         {
                             var fieldSymbol = semanticModel.GetDeclaredSymbol(variable);
                             if (fieldSymbol != null)
                             {
-                                Log.Print($"{fieldSymbol} is not null");
+                                Debug.WriteLine($"{fieldSymbol} is not null");
 
                                 foreach (var attribute in fieldSymbol.GetAttributes())
                                 {
-                                    Log.Print($"Attribute on field: {attribute.AttributeClass.ToDisplayString()}");
+                                    Debug.WriteLine($"Attribute on field: {attribute.AttributeClass.ToDisplayString()}");
                                 }
 
-                                
+
                                 var firstAttribute = fieldSymbol.GetAttributes().FirstOrDefault(ad => SymbolEqualityComparer.Default.Equals(ad.AttributeClass, attributeSymbol));
 
                                 if (firstAttribute is null)
                                 {
-                                    Log.Print("No attributes matching the symbol found.");
+                                    Debug.WriteLine("No attributes matching the symbol found.");
                                 }
 
                                 if (firstAttribute is AttributeData attributeData)
                                 {
-                                    Log.Print($"{firstAttribute} is {attributeData}");
+                                    Debug.WriteLine($"{firstAttribute} is {attributeData}");
                                     string namespaceName = fieldSymbol.ContainingNamespace.ToDisplayString();
                                     string className = fieldSymbol.ContainingType.Name;
                                     string variableName = fieldSymbol.Name;
@@ -98,40 +98,42 @@ namespace TunnelGen.Generators.Generators
                                     context.AnalyzerConfigOptions.GlobalOptions.TryGetValue("build_property.TunnelUrl", out var tunnelUrl);
 
                                     tunnelUrl = string.IsNullOrWhiteSpace(tunnelUrl) ? "https://mytunnel.com" : tunnelUrl;
-                                    
+
                                     string generatedCode = GenerateClassWithTunnelUrlProperty(namespaceName, className, variableName, tunnelUrl, modifier);
 
-                                    Log.Print("Generated this code");
-                                    Log.Print(generatedCode);
-                                    
+                                    Debug.WriteLine("Generated this code");
+                                    Debug.WriteLine(generatedCode);
+
                                     context.AddSource($"{className}.g.cs", SourceText.From(generatedCode, Encoding.UTF8));
                                 }
                                 else
                                 {
-                                    Log.Print($"{firstAttribute.AttributeClass.Name} did not match {attributeSymbol}");
+                                    Debug.WriteLine($"{firstAttribute.AttributeClass.Name} did not match {attributeSymbol}");
                                 }
                             }
                             else
                             {
-                                Log.Print($"{variable} FieldSymbol us null");
+                                Debug.WriteLine($"{variable} FieldSymbol us null");
                             }
                         }
                     }
                     else
                     {
-                        Log.Print($"{attributeSyntax.Parent.Parent} is not FieldDeclarationSyntax");
+                        Debug.WriteLine($"{attributeSyntax.Parent.Parent} is not FieldDeclarationSyntax");
                     }
                 }
             }
             catch (Exception ex)
             {
-                Log.Print($"Something went wrong: {ex.Message}");
-                Log.Print(ex.StackTrace);
+                Debug.WriteLine($"Something went wrong: {ex.Message}");
+                Debug.WriteLine(ex.StackTrace);
             }
 
-            Log.Print("Finished execution");
+            Debug.WriteLine("Finished execution");
 
-            Log.FlushLogs(context);
+            //Log.FlushLogs(context);
+            context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor("SG0001", "MyDiagnostic", "MyDiagnosticMessage", "MyCategory", DiagnosticSeverity.Warning, true), Location.Create("C:\\Users\\matt\\source\\repos\\TunnelGen\\logs\\diagnostic.txt", new TextSpan(0, 0), new LinePositionSpan(new LinePosition(0, 0), new LinePosition(0, 0)))));
+
         }
 
 
@@ -144,16 +146,16 @@ namespace TunnelGen.Generators.Generators
 //                Debugger.Launch();
 //            }
 //#endif 
-            Log.Print("Initialising...");
+            Debug.WriteLine("Initialising...");
             try
             {
                 context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
             }
             catch (Exception ex)
             {
-                Log.Print($"Failed to register syntax receiver: {ex.Message}");
+                Debug.WriteLine($"Failed to register syntax receiver: {ex.Message}");
             }
-            Log.Print("Set syntax receiver.");
+            Debug.WriteLine("Set syntax receiver.");
         }
 
         private class SyntaxReceiver : ISyntaxReceiver
@@ -169,7 +171,7 @@ namespace TunnelGen.Generators.Generators
                     if (attributeSyntax.Name.ToString().Contains("SetTunnelUrl"))
                     {
                         CandidateAttributes.Add(attributeSyntax);
-                        Log.Print($"Candidate {attributeSyntax.Name} added");
+                        Debug.WriteLine($"Candidate {attributeSyntax.Name} added");
                     }
                 }
             }
@@ -180,7 +182,7 @@ namespace TunnelGen.Generators.Generators
             string modifier = null)
         {
             string pascalCaseVariableName = ConvertToPascalCase(variableName);
-            
+
             var code = $@"
         namespace {Escape(namespaceName)}
         {{
