@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace TunnelGen.Generators
@@ -15,7 +16,11 @@ namespace TunnelGen.Generators
 
         public static void FlushLogs(GeneratorExecutionContext context)
         {
-            context.AddSource($"logs.g.cs", SourceText.From(string.Join("\n", Logs), Encoding.UTF8));
+            //foreach (var line in Logs)
+            //{
+            //    Debug.WriteLine(line);
+            //}
+            //context.AddSource($"logs.g.cs", SourceText.From(string.Join("\n", Logs), Encoding.UTF8));
         }
     }
 }

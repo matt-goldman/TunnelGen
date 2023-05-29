@@ -2,7 +2,6 @@
 
 namespace TunnelGen.Attributes;
 
-
 [AttributeUsage(AttributeTargets.Field, Inherited = false, AllowMultiple = false)]
 public sealed class SetTunnelUrlAttribute : Attribute
 {

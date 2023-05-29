@@ -5,7 +5,6 @@ using Microsoft.CodeAnalysis.Text;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -28,6 +27,8 @@ namespace TunnelGen.Generators.Generators
 
                 var compilation = (CSharpCompilation)context.Compilation;
                 var attributeSymbol = compilation.GetTypeByMetadataName("TunnelGen.Attributes.SetTunnelUrlAttribute");
+                Log.Print($"Attribute symbol full name: {attributeSymbol.ToDisplayString()}");
+
 
                 Log.Print("Got the attribute symbol...");
 
@@ -47,37 +48,78 @@ namespace TunnelGen.Generators.Generators
                     SemanticModel semanticModel = compilation.GetSemanticModel(attributeSyntax.SyntaxTree);
 
                     Log.Print("Got the semantic model.");
-                    
-                    if (semanticModel.GetDeclaredSymbol(attributeSyntax.Parent.Parent) is IFieldSymbol fieldSymbol)
+
+                    Log.Print($"attributeSyntax.Parent is of type {attributeSyntax.Parent.GetType().Name}, with kind {attributeSyntax.Parent.Kind()}");
+                    Log.Print($"attributeSyntax.Parent.Parent is of type {attributeSyntax.Parent.Parent.GetType().Name}, with kind {attributeSyntax.Parent.Parent.Kind()}");
+
+                    var parentParent = attributeSyntax.Parent.Parent;
+                    Log.Print($"Parent.Parent is of type {parentParent.GetType().Name}, with kind {parentParent.Kind()}");
+                    if (parentParent is FieldDeclarationSyntax fieldDecl)
                     {
-                        var firstAttribute = fieldSymbol.GetAttributes().FirstOrDefault(ad => SymbolEqualityComparer.Default.Equals(ad.AttributeClass, attributeSymbol));
-                        
-                        if (firstAttribute is null)
-                        {
-                            Log.Print("No attributes matching the symbol found.");
-                        }
+                        Log.Print($"Field name: {fieldDecl.Declaration.Variables.First().Identifier.Text}");
+                    }
+                    else if (parentParent is PropertyDeclarationSyntax propDecl)
+                    {
+                        Log.Print($"Property name: {propDecl.Identifier.Text}");
+                    }
 
-                        if (firstAttribute is AttributeData attributeData)
+                    if (attributeSyntax.Parent.Parent is FieldDeclarationSyntax fieldDeclarationSyntax)
+                    {
+                        Log.Print($"{attributeSyntax.Parent.Parent} is FieldDeclarationSyntax");
+                        foreach (var variable in fieldDeclarationSyntax.Declaration.Variables)
                         {
-                            string namespaceName = fieldSymbol.ContainingNamespace.ToDisplayString();
-                            string className = fieldSymbol.ContainingType.Name;
-                            string variableName = fieldSymbol.Name;
-                            string tunnelName = attributeData.NamedArguments.FirstOrDefault(na => na.Key == "TunnelName").Value.Value?.ToString() ?? variableName;
-                            string modifier = fieldSymbol.IsStatic ? "static" : null;
+                            var fieldSymbol = semanticModel.GetDeclaredSymbol(variable);
+                            if (fieldSymbol != null)
+                            {
+                                Log.Print($"{fieldSymbol} is not null");
 
-                            context.AnalyzerConfigOptions.GlobalOptions.TryGetValue("build_property.TunnelUrl", out var tunnelUrl);
+                                foreach (var attribute in fieldSymbol.GetAttributes())
+                                {
+                                    Log.Print($"Attribute on field: {attribute.AttributeClass.ToDisplayString()}");
+                                }
 
-                            string generatedCode = GenerateClassWithTunnelUrlProperty(namespaceName, className, variableName, tunnelUrl, modifier);
-                            context.AddSource($"{className}.g.cs", SourceText.From(generatedCode, Encoding.UTF8));
-                        }
-                        else
-                        {
-                            Log.Print($"{firstAttribute.AttributeClass.Name} did not match {attributeSymbol}");
+                                
+                                var firstAttribute = fieldSymbol.GetAttributes().FirstOrDefault(ad => SymbolEqualityComparer.Default.Equals(ad.AttributeClass, attributeSymbol));
+
+                                if (firstAttribute is null)
+                                {
+                                    Log.Print("No attributes matching the symbol found.");
+                                }
+
+                                if (firstAttribute is AttributeData attributeData)
+                                {
+                                    Log.Print($"{firstAttribute} is {attributeData}");
+                                    string namespaceName = fieldSymbol.ContainingNamespace.ToDisplayString();
+                                    string className = fieldSymbol.ContainingType.Name;
+                                    string variableName = fieldSymbol.Name;
+                                    string tunnelName = attributeData.NamedArguments.FirstOrDefault(na => na.Key == "TunnelName").Value.Value?.ToString() ?? variableName;
+                                    string modifier = fieldSymbol.IsStatic ? "static" : null;
+
+                                    context.AnalyzerConfigOptions.GlobalOptions.TryGetValue("build_property.TunnelUrl", out var tunnelUrl);
+
+                                    tunnelUrl = string.IsNullOrWhiteSpace(tunnelUrl) ? "https://mytunnel.com" : tunnelUrl;
+                                    
+                                    string generatedCode = GenerateClassWithTunnelUrlProperty(namespaceName, className, variableName, tunnelUrl, modifier);
+
+                                    Log.Print("Generated this code");
+                                    Log.Print(generatedCode);
+                                    
+                                    context.AddSource($"{className}.g.cs", SourceText.From(generatedCode, Encoding.UTF8));
+                                }
+                                else
+                                {
+                                    Log.Print($"{firstAttribute.AttributeClass.Name} did not match {attributeSymbol}");
+                                }
+                            }
+                            else
+                            {
+                                Log.Print($"{variable} FieldSymbol us null");
+                            }
                         }
                     }
                     else
                     {
-                        Log.Print($"Semantic Model {semanticModel} is not field symbol.");
+                        Log.Print($"{attributeSyntax.Parent.Parent} is not FieldDeclarationSyntax");
                     }
                 }
             }
@@ -96,12 +138,12 @@ namespace TunnelGen.Generators.Generators
 
         public void Initialize(GeneratorInitializationContext context)
         {
-#if DEBUG
-            if (!Debugger.IsAttached)
-            {
-                Debugger.Launch();
-            }
-#endif 
+//#if DEBUG
+//            if (!Debugger.IsAttached)
+//            {
+//                Debugger.Launch();
+//            }
+//#endif 
             Log.Print("Initialising...");
             try
             {
