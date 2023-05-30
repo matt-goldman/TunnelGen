@@ -59,16 +59,32 @@
 		<ProjectReference Include="..\TunnelGen.Attributes\TunnelGen.Attributes.csproj" />
 	</ItemGroup>
 
-	<UsingTask TaskName="TunnelGen.Extensions.Tasks.ReadTunnelTask" AssemblyFile="C:\tunnelgen\TunnelGen.Extensions.dll" />
+	<!--<UsingTask TaskName="TunnelGen.Tasks.ReadTunnelTask" AssemblyFile="C:\tunnelgen\TunnelGen.Tasks.dll" />
 
-	<Target Name="ReadTunnelUrls" BeforeTargets="PrepareForBuild">
+	<Target Name="SetTunnelUrl" BeforeTargets="PrepareForBuild">
 		<ReadTunnelTask TunnelName="WeatherForecasts">
-			<Output TaskParameter="TunnelUrl" PropertyName="DefaultTunnel" />
+			<Output TaskParameter="TunnelUrl" PropertyName="TunnelUrl" />
 		</ReadTunnelTask>
-		<!--<ReadTunnelTask TunnelName="IDS">
-			<Output TaskParameter="TunnelUrl" PropertyName="IdsTunnelUrl" />
-		</ReadTunnelTask>-->
+		<Message Text="TunnelUrl value in MS Build: $(TunnelUrl)" Importance="high" />
 	</Target>
+
+
+	<ItemGroup>
+		<CompilerVisibleProperty Include="TunnelUrl" />
+	</ItemGroup>-->
+
+	<PropertyGroup>
+		<TunnelUrl>https://itsworkingifyouseethis.com</TunnelUrl>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<CompilerVisibleProperty Include="TunnelUrl" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<AdditionalFiles Include="tunnelurl.txt" />
+	</ItemGroup>
+
 
 
 </Project>

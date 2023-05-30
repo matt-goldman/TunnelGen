@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis.Text;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -101,6 +102,10 @@ namespace TunnelGen.Generators.Generators
 
                                     context.AnalyzerConfigOptions.GlobalOptions.TryGetValue("build_property.DefaultTunnel", out var defaultTunnelUrl);
 
+                                    context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor("SG0004", "Debug", $"[TunnelUrlGenerator] Named TunnelUrl: {tunnelUrl}", "Debug", DiagnosticSeverity.Warning, true), null));
+                                    context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor("SG0004", "Debug", $"[TunnelUrlGenerator] Default TunnelUrl: {tunnelUrl}", "Debug", DiagnosticSeverity.Warning, true), null));
+
+
                                     if (string.IsNullOrWhiteSpace(tunnelUrl))
                                     {
                                         context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor("SG0002", "TunnelUrlMissing", $"Tunnel URL for '{tunnelName}' not found. Falling back to the default tunnel URL.", "TunnelGenCategory", DiagnosticSeverity.Warning, true), null));
@@ -109,10 +114,29 @@ namespace TunnelGen.Generators.Generators
 
                                     if (string.IsNullOrWhiteSpace(tunnelUrl))
                                     {
+                                        var tunnelUrlFile = context.AdditionalFiles
+                                                .FirstOrDefault(f => Path.GetFileName(f.Path).Equals("tunnelurl.txt"));
+
+                                        if (tunnelUrlFile != null)
+                                        {
+                                            context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor("SG0003", "TunnelUrlFileFound", "Tunnel URL file found in additional files.", "TunnelGenCategory", DiagnosticSeverity.Warning, true), null));
+                                            tunnelUrl = tunnelUrlFile.GetText(context.CancellationToken)?.ToString();
+                                            context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor("SG0003", "TunnelUrlValue", $"Tunnel URL value read from additional files: {tunnelUrl}", "TunnelGenCategory", DiagnosticSeverity.Warning, true), null));
+                                        }
+                                        else
+                                        {
+                                            context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor("SG0003", "TunnelUrlFileMissing", "Unable to read the tunnel URL file.", "TunnelGenCategory", DiagnosticSeverity.Warning, true), null));
+                                        }
+                                    }
+
+                                    if (string.IsNullOrWhiteSpace(tunnelUrl))
+                                    {
                                         context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor("SG0003", "TunnelUrlMissing", "Both specific and default tunnel URLs are missing. Code generation halted.", "TunnelGenCategory", DiagnosticSeverity.Error, true), null));
                                         return;
                                     }
-                                    
+
+                                    //string tunnelUrl = "https://urlhardcodedinsourcegen.com";
+
                                     string generatedCode = GenerateClassWithTunnelUrlProperty(namespaceName, className, variableName, tunnelUrl, modifier);
 
                                     Debug.WriteLine("Generated this code");
@@ -142,24 +166,20 @@ namespace TunnelGen.Generators.Generators
                 Debug.WriteLine($"Something went wrong: {ex.Message}");
                 Debug.WriteLine(ex.StackTrace);
             }
-
+            
             Debug.WriteLine("Finished execution");
-
-            //Log.FlushLogs(context);
-            context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor("SG0001", "MyDiagnostic", "MyDiagnosticMessage", "MyCategory", DiagnosticSeverity.Warning, true), Location.Create("C:\\Users\\matt\\source\\repos\\TunnelGen\\logs\\diagnostic.txt", new TextSpan(0, 0), new LinePositionSpan(new LinePosition(0, 0), new LinePosition(0, 0)))));
-
         }
 
 
 
         public void Initialize(GeneratorInitializationContext context)
         {
-//#if DEBUG
-//            if (!Debugger.IsAttached)
-//            {
-//                Debugger.Launch();
-//            }
-//#endif 
+#if DEBUG
+            if (!Debugger.IsAttached)
+            {
+                Debugger.Launch();
+            }
+#endif 
             Debug.WriteLine("Initialising...");
             try
             {
