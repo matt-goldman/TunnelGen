@@ -24,11 +24,11 @@ namespace TunnelGen.Tasks
 
             try
             {
-                BuildEngine.LogMessageEvent(new BuildMessageEventArgs($"Attempting to get Tunnel URL from: {filePath}", "", "ReadTunnelTask", MessageImportance.High));
+                BuildEngine.LogMessageEvent(new BuildMessageEventArgs($"[ReadTunnelTask] Tunnel Name: {TunnelName}", "", "ReadTunnelTask", MessageImportance.High));
+                BuildEngine.LogMessageEvent(new BuildMessageEventArgs($"[ReadTunnelTask] Attempting to get Tunnel URL from: {filePath}", "", "ReadTunnelTask", MessageImportance.High));
                 string value = File.ReadAllText(filePath);
                 TunnelUrl = value;
-                BuildEngine.LogMessageEvent(new BuildMessageEventArgs($"Tunnel URL: {value}", "", "ReadTunnelTask", MessageImportance.High));
-                BuildEngine.LogMessageEvent(new BuildMessageEventArgs($"Tunnel Name: {TunnelName}", "", "ReadTunnelTask", MessageImportance.High));
+                BuildEngine.LogMessageEvent(new BuildMessageEventArgs($"[ReadTunnelTask] Tunnel URL: {value}", "", "ReadTunnelTask", MessageImportance.High));
             }
             catch (Exception e)
             {
