@@ -1,9 +1,9 @@
 ﻿using Microsoft.Build.Framework;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace TunnelGen.Tasks
 {
@@ -52,7 +52,7 @@ namespace TunnelGen.Tasks
             
             if (tunnelList.Any())
             {
-                Tunnels = JsonConvert.SerializeObject(tunnelList);
+                Tunnels = SerialiseTunnels(tunnelList);
                 return true;
             }
             else
@@ -98,6 +98,18 @@ namespace TunnelGen.Tasks
                 BuildEngine.LogErrorEvent(new BuildErrorEventArgs("", "", "", 0, 0, 0, 0, $"Error reading tunnel file: {e.Message}", "", "ReadTunnelTask"));
                 return string.Empty;
             }
+        }
+
+        private string SerialiseTunnels(List<Tunnel> list)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var tunnel in list)
+            {
+                sb.Append($"{tunnel.TunnelName}|{tunnel.TunnelUrl},");
+            }
+
+            return sb.ToString().TrimEnd(',');
         }
     }
 }

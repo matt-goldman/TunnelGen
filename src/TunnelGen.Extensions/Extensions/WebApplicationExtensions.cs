@@ -7,7 +7,7 @@ public static class WebApplicationExtensions
     public static WebApplication SetTunnelUrl(this WebApplication app, string? tunnelName)
     {
 #if DEBUG
-        tunnelName = string.IsNullOrWhiteSpace(tunnelName) ? "defaultunnel" : tunnelName;
+        tunnelName = string.IsNullOrWhiteSpace(tunnelName) ? "defaulttunnel" : tunnelName;
 
         var tunnelUrl = Environment.GetEnvironmentVariable("VS_TUNNEL_URL");
         string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);

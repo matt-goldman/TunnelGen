@@ -2,11 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+	<PackageId>TunnelGen.Tasks</PackageId>
+	<Version>1.0.0</Version>
+	<Authors>Matt Goldman</Authors>
+	<Company>Goldiesoft</Company>
+	<Product>TunnelGen</Product> 
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Build.Framework" Version="17.6.3" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
 </Project>

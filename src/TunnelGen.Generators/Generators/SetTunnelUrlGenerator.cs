@@ -22,7 +22,7 @@ namespace TunnelGen.Generators.Generators
 
             context.AnalyzerConfigOptions.GlobalOptions.TryGetValue(tunnelProperty, out var tunnels);
 
-            
+            var tunnelList = DeserialiseTunnels(tunnels);
 
             try
             {
@@ -98,11 +98,13 @@ namespace TunnelGen.Generators.Generators
                                     string namespaceName = fieldSymbol.ContainingNamespace.ToDisplayString();
                                     string className = fieldSymbol.ContainingType.Name;
                                     string variableName = fieldSymbol.Name;
-                                    string tunnelName = attributeData.NamedArguments.FirstOrDefault(na => na.Key == "TunnelName").Value.Value?.ToString() ?? variableName;
+                                    string tunnelName = attributeData.NamedArguments.FirstOrDefault(na => na.Key == "TunnelName").Value.Value?.ToString() ?? "defaulttunnel";
                                     string modifier = fieldSymbol.IsStatic ? "static" : null;
 
                                     //string tunnelProperty = $"build_property_{tunnelName}";
-                                    
+
+                                    var tunnelUrl = tunnelList.Where(t => t.TunnelName == tunnelName).FirstOrDefault()?.TunnelUrl;
+
 
                                     //context.AnalyzerConfigOptions.GlobalOptions.TryGetValue("build_property.DefaultTunnel", out var defaultTunnelUrl);
 
@@ -138,7 +140,7 @@ namespace TunnelGen.Generators.Generators
                                     //    context.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor("SG0003", "TunnelUrlMissing", "Both specific and default tunnel URLs are missing. Code generation halted.", "TunnelGenCategory", DiagnosticSeverity.Error, true), null));
                                     //    return;
                                     //}
-
+                                    
                                     tunnelUrl = string.IsNullOrWhiteSpace(tunnelUrl) ? "URL will be replaced at build time" : tunnelUrl;
 
                                     string generatedCode = GenerateClassWithTunnelUrlProperty(namespaceName, className, variableName, tunnelUrl, modifier);
@@ -254,6 +256,27 @@ namespace TunnelGen.Generators.Generators
 
             // This is a simple implementation. You might want to escape other characters as well.
             return input.Replace("\"", "\\\"");
+        }
+
+        private List<Tunnel> DeserialiseTunnels(string tunnelString)
+        {
+            var tunnels = new List<Tunnel>();
+
+            var tunnelList = tunnelString.Split(',');//.ToList();
+
+            foreach (var tunnelData in tunnelList)
+            {
+                if (!string.IsNullOrEmpty(tunnelData))
+                {
+                    var tunnelArray = tunnelData.Split('|');
+
+                    var tunnel = new Tunnel { TunnelName = tunnelArray[0], TunnelUrl = tunnelArray[1] };
+
+                    tunnels.Add(tunnel);
+                }
+            }
+
+            return tunnels;
         }
     }
 }

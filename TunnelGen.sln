@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TunnelGen.Attributes", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TunnelGen.Extensions", "src\TunnelGen.Extensions\TunnelGen.Extensions.csproj", "{92F79F85-0F41-4269-B913-731325AB33CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TunnelGen.Tasks", "src\TunnelGen.Tasks\TunnelGen.Tasks.csproj", "{274D647A-92D7-4085-8A47-1A5D4F27E413}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TunnelGen.Tasks", "src\TunnelGen.Tasks\TunnelGen.Tasks.csproj", "{274D647A-92D7-4085-8A47-1A5D4F27E413}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TunnelGen.Meta", "src\TunnelGen.Meta\TunnelGen.Meta.csproj", "{E1C95F2C-8020-449C-AA1A-69463D1B135D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +55,10 @@ Global
 		{274D647A-92D7-4085-8A47-1A5D4F27E413}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{274D647A-92D7-4085-8A47-1A5D4F27E413}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{274D647A-92D7-4085-8A47-1A5D4F27E413}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1C95F2C-8020-449C-AA1A-69463D1B135D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1C95F2C-8020-449C-AA1A-69463D1B135D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1C95F2C-8020-449C-AA1A-69463D1B135D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1C95F2C-8020-449C-AA1A-69463D1B135D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,5 +71,9 @@ Global
 		{B32340EF-8D01-4A85-BC45-EC484C6DBFE1} = {DEDA1B70-7F27-4DD2-9845-7D2CB4C33738}
 		{92F79F85-0F41-4269-B913-731325AB33CB} = {DEDA1B70-7F27-4DD2-9845-7D2CB4C33738}
 		{274D647A-92D7-4085-8A47-1A5D4F27E413} = {DEDA1B70-7F27-4DD2-9845-7D2CB4C33738}
+		{E1C95F2C-8020-449C-AA1A-69463D1B135D} = {DEDA1B70-7F27-4DD2-9845-7D2CB4C33738}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {69DC4CEA-3B8B-4EDA-BD4B-889ED015FCC4}
 	EndGlobalSection
 EndGlobal
