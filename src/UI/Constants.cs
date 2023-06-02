@@ -3,7 +3,10 @@ namespace UI;
 
 public static partial class Constants
 {
-    [SetTunnelUrl]
+    [SetTunnelUrl("WeatherForecasts")]
     private static string baseUrl = "https://myprodapi.com";
+
+    [SetTunnelUrl("TestApp")]
+    private static string testUrl = "https://mytestapi.com";
 }
 

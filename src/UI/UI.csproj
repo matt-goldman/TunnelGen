@@ -62,10 +62,10 @@
 	<UsingTask TaskName="TunnelGen.Tasks.ReadTunnelTask" AssemblyFile="C:\tunnelgen\TunnelGen.Tasks.dll" />
 
 	<Target Name="SetTunnelUrl" BeforeTargets="PrepareForBuild">
-		<ReadTunnelTask TunnelName="WeatherForecasts">
-			<Output TaskParameter="TunnelUrl" PropertyName="TunnelUrl" />
+		<ReadTunnelTask TunnelNames="WeatherForecasts,TestApp">
+			<Output TaskParameter="Tunnels" PropertyName="Tunnels" />
 		</ReadTunnelTask>
-		<Message Text="TunnelUrl value in MS Build: $(TunnelUrl)" Importance="high" />
+		<Message Text="Tunnels value in MS Build: $(Tunnels)" Importance="high" />
 	</Target>
 
 
@@ -78,7 +78,7 @@
 	</PropertyGroup>-->
 
 	<ItemGroup>
-		<CompilerVisibleProperty Include="TunnelUrl" />
+		<CompilerVisibleProperty Include="Tunnels" />
 	</ItemGroup>
 
 

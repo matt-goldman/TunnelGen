@@ -18,6 +18,12 @@ namespace TunnelGen.Generators.Generators
         {
             Debug.WriteLine("Executing code generator");
 
+            string tunnelProperty = $"build_property.Tunnels";
+
+            context.AnalyzerConfigOptions.GlobalOptions.TryGetValue(tunnelProperty, out var tunnels);
+
+            
+
             try
             {
                 Debug.WriteLine("Trying to get syntax receiver...");
@@ -96,9 +102,7 @@ namespace TunnelGen.Generators.Generators
                                     string modifier = fieldSymbol.IsStatic ? "static" : null;
 
                                     //string tunnelProperty = $"build_property_{tunnelName}";
-                                    string tunnelProperty = $"build_property.TunnelUrl";
-
-                                    context.AnalyzerConfigOptions.GlobalOptions.TryGetValue(tunnelProperty, out var tunnelUrl);
+                                    
 
                                     //context.AnalyzerConfigOptions.GlobalOptions.TryGetValue("build_property.DefaultTunnel", out var defaultTunnelUrl);
 
