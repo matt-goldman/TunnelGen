@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
 	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <PackageId>TunnelGen.Generators</PackageId>
-	<Version>1.0.0</Version>
+	<Version>1.0.1</Version>
 	<Authors>Matt Goldman</Authors>
 	<Company>Goldiesoft</Company>
 	<Product>TunnelGen</Product>
@@ -13,6 +13,10 @@
 	<PropertyGroup>
 		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
 	</PropertyGroup>
+
+  <ItemGroup>
+	  <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">

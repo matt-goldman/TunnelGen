@@ -4,11 +4,11 @@
     <TargetFramework>netstandard2.0</TargetFramework>
 	  <!--<TargetFrameworks>net7.0;net7.0-android;net7.0-ios;net7.0-maccatalyst</TargetFrameworks>-->
 	  <IsPackable>true</IsPackable>
-	<PackageId>TunnelGen.Tasks</PackageId>
-	<Version>1.0.5</Version>
-	<Authors>Matt Goldman</Authors>
-	<Company>Goldiesoft</Company>
-	<Product>TunnelGen</Product>
+	  <PackageId>TunnelGen.Tasks</PackageId>
+	  <Version>1.0.11</Version>
+	  <Authors>Matt Goldman</Authors>
+	  <Company>Goldiesoft</Company>
+	  <Product>TunnelGen</Product>
 	  <Description>Reads the tunnel URL for the specified tunnel names and saves them as msbuild properties for use in a source generator.</Description>
 	  <Copyright>Copyright Matt Goldman 2023</Copyright>
 	  <!-- This target will run when MSBuild is collecting the files to be packaged, and we'll implement it below. This property controls the dependency list for this packaging process, so by adding our custom property we hook ourselves into the process in a supported way. -->
@@ -21,6 +21,7 @@
 	  <NoWarn>NU5100</NoWarn>
 	  <!-- Tell the SDK to generate a deps.json file -->
 	  <GenerateDependencyFile>true</GenerateDependencyFile>
+	  <!-- <IncludeContentInPack>true</IncludeContentInPack> -->
   </PropertyGroup>
 
   <ItemGroup>

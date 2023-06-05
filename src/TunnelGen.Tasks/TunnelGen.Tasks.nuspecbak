@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+<metadata>
+  <id>TunnelGen.Tasks</id>
+  <version>1.0.8</version>
+  <authors>Matt Goldman</authors>
+  <owners>Matt Goldman</owners>
+	<product>TunnelGen</product>
+  <description>Reads the tunnel URL for the specified tunnel names and saves them as msbuild properties for use in a source generator.</description>
+	<copyright>Copyright © Matt Goldman 2023</copyright>
+  <requireLicenseAcceptance>false</requireLicenseAcceptance>
+  <license type="expression">MIT</license>
+  <!-- <projectUrl>https://github.com/matt-goldman/TunnelGen</projectUrl>
+  <iconUrl>https://raw.githubusercontent.com/matt-goldman/TunnelGen/main/assets/tunnelgen.svg</iconUrl> -->
+  <tags>DevTunnels SourceGenerator</tags>
+  <repository type="git" url="https://github.com/matt-goldman/TunnelGen.git"/>
+</metadata>
+  <files>
+    <file src="**/*.props" target="build" />
+    <file src="**/*.targets" target="build" />
+  </files>
+</package>
