@@ -51,7 +51,8 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
-		<PackageReference Include="TunnelGen" Version="1.0.0" />
+		<!--<PackageReference Include="TunnelGen" Version="1.0.4" />-->
+		<PackageReference Include="TunnelGen.Tasks" Version="1.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -62,12 +63,12 @@
 
 	<!--<UsingTask TaskName="TunnelGen.Tasks.ReadTunnelTask" AssemblyFile="C:\tunnelgen\TunnelGen.Tasks.dll" />-->
 
-	<Target Name="SetTunnelUrl" BeforeTargets="PrepareForBuild">
+	<!--<Target Name="SetTunnelUrl" BeforeTargets="PrepareForBuild">
 		<ReadTunnelTask TunnelNames="WeatherForecasts,TestApp">
 			<Output TaskParameter="Tunnels" PropertyName="Tunnels" />
 		</ReadTunnelTask>
 		<Message Text="Tunnels value in MS Build: $(Tunnels)" Importance="high" />
-	</Target>
+	</Target>-->
 
 
 	<!--<ItemGroup>
