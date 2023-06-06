@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TunnelGen.Extensions", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TunnelGen.Tasks", "src\TunnelGen.Tasks\TunnelGen.Tasks.csproj", "{274D647A-92D7-4085-8A47-1A5D4F27E413}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TunnelGen.Meta", "src\TunnelGen.Meta\TunnelGen.Meta.csproj", "{E1C95F2C-8020-449C-AA1A-69463D1B135D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TunnelGen.Meta", "src\TunnelGen.Meta\TunnelGen.Meta.csproj", "{E1C95F2C-8020-449C-AA1A-69463D1B135D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +41,7 @@ Global
 		{8DC54045-F3A4-4D54-913C-140123D9F09C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B78151D6-511B-4AC9-BCD5-BD2C02BB0426}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B78151D6-511B-4AC9-BCD5-BD2C02BB0426}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B78151D6-511B-4AC9-BCD5-BD2C02BB0426}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{B78151D6-511B-4AC9-BCD5-BD2C02BB0426}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B78151D6-511B-4AC9-BCD5-BD2C02BB0426}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B32340EF-8D01-4A85-BC45-EC484C6DBFE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

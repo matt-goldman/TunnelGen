@@ -22,6 +22,8 @@ namespace TunnelGen.Generators.Generators
 
             context.AnalyzerConfigOptions.GlobalOptions.TryGetValue(tunnelProperty, out var tunnels);
 
+            Debug.WriteLine($"[SetTunnelUrlGenerator] Tunnels: {tunnels}");
+
             var tunnelList = DeserialiseTunnels(tunnels);
 
             try
