@@ -1,0 +1,33 @@
+<#@ import namespace="System.IO" #>
+<#@ output extension=".g.cs" #>
+<#
+string GetTunnelUrl()
+{
+	try
+	{
+		string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+		string filePath = Path.Combine(appDataPath, "vstunnel.txt");
+		string value = File.ReadAllText(filePath);
+		//var value = Environment.GetEnvironmentVariable("VS_TUNNEL_URL_API");
+		//return value??"Will be set at build time";
+		return value;
+	}
+	catch(Exception ex)
+	{
+		return "Could not get tunnel URL";
+	}
+}
+#>
+namespace UI;
+public static partial class Constants
+{
+<# var tunnelUrl = GetTunnelUrl(); #>
+	public static string BaseUrl
+	{
+	#if DEBUG
+		get => "<#= tunnelUrl #>";
+	#else
+		get => baseUrl;
+	#endif
+	}
+}

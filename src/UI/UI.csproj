@@ -51,40 +51,29 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
-		<!--<PackageReference Include="TunnelGen" Version="1.0.8" />-->
-		<PackageReference Include="TunnelGen.Tasks" Version="1.0.11" />
-		<PackageReference Include="TunnelGen.Attributes" Version="1.0.0" />
-		<PackageReference Include="TunnelGen.Generators" Version="1.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Shared\Shared.csproj" />
-		<!--<ProjectReference Include="..\TunnelGen.Generators\TunnelGen.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-		<ProjectReference Include="..\TunnelGen.Attributes\TunnelGen.Attributes.csproj" />-->
 	</ItemGroup>
-
-	<!--<UsingTask TaskName="TunnelGen.Tasks.ReadTunnelTask" AssemblyFile="C:\tunnelgen\TunnelGen.Tasks.dll" />-->
-
-	<Target Name="SetTunnelUrl" BeforeTargets="PrepareForBuild">
-		<ReadTunnelTask TunnelNames="WeatherForecasts,TestApp">
-			<Output TaskParameter="Tunnels" PropertyName="Tunnels" />
-		</ReadTunnelTask>
-		<Message Text="Tunnels value in MS Build: $(Tunnels)" Importance="high" />
-	</Target>
-
-
-	<!--<ItemGroup>
-		<CompilerVisibleProperty Include="TunnelUrl" />
-	</ItemGroup>-->
-
-	<!--<PropertyGroup>
-		<TunnelUrl>https://itsworkingifyouseethis.com</TunnelUrl>
-	</PropertyGroup>-->
 
 	<ItemGroup>
-		<CompilerVisibleProperty Include="Tunnels" />
+	  <None Update="Constants.tt">
+	    <Generator>TextTemplatingFileGenerator</Generator>
+	    <LastGenOutput>Constants.g.cs</LastGenOutput>
+	  </None>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Update="Constants.g.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Constants.tt</DependentUpon>
+	  </Compile>
+	</ItemGroup>
 
 </Project>
